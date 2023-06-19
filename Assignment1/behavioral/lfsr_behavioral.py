@@ -1,3 +1,9 @@
+# PLEASE ONLY MODIFY THE PARTS WHICH SAY "YOUR CODE HERE"
+# YOU MAY NEED TO LOOK UP THE API FROM PYRTL GITHUB REPOSITORY FOR SOME FUNCTIONS
+# ALSO I WOULD RECOMMEND TO COMMENT OUT THE WHOLE FILE AND UNCOMMENT THE PART YOU'RE WORKING ON
+# BEFORE MOVING ON TO THE NEXT SECTION, THAT WAY YOU ARE DEVELOPING IN A STEP-WISE MANNER WHICH
+# MAKES DEBUGGING MUCH EASIER
+
 import pyrtl
 
 init = pyrtl.Input(1,'init')
@@ -6,22 +12,14 @@ data_in = pyrtl.Input(8,'data_in')
 data_out = pyrtl.Output(8,'data_out')
 data_reg = pyrtl.Register(8,'data_reg')
 
-with pyrtl.conditional_assignment:
-	with ~init:
-		data_reg.next |= pyrtl.concat(		data_reg[6],						#bit7
-											data_reg[5],						#bit6
-											data_reg[4],						#bit5
-											data_reg[3]^data_reg[7],			#bit4
-											data_reg[2]^data_reg[7],			#bit3
-											data_reg[1]^data_reg[7],			#bit2
-											data_reg[0],						#bit1
-											data_reg[7],						#bit0
-									)
-	with pyrtl.otherwise:
-		data_reg.next |= data_in
+# YOUR CODE HERE
+#
+# THIS SHOULD BE YOUR MAIN CODE FOR THE STRUCTURAL LFSR
+#
+#
 
-data_out<<=data_reg
 
+# LINES 22 - 29 ARE FOR SIMULATION AND THE TERMINAL OUTPUT 165=0xA5
 sim = pyrtl.Simulation()
 sim.step_multiple({
 	'data_in' 	: [0,165,0,0,0,0,0,0,0,0,0,0,165,0,0,0,0,0,0,0,0,0,0,0],
@@ -32,21 +30,19 @@ sim.tracer.render_trace()
 # -------------------------------------------------------------------------------
 # Now we will do the timing analysis as well as print out the critical path
 
-# Generating timing analysis information
+# GENERATE TIMING ANALYSIS INFORMATION AND PRINT THEM ON THE SCREEN
 print("Pre Synthesis:\n")
-timing = pyrtl.TimingAnalysis()
-timing.print_max_length()
+timing = # YOUR CODE HERE
 
-# Printing out the critical paths as well as get them
-# back as an array.
-critical_path_info = timing.critical_path()
+# PRINT OUT THE CRITICAL PATHS AND GET THEM BACK AS AN ARRAY
+critical_path_info = # YOUR CODE HERE
 
 # --- Part 2: Area Analysis --------------------------------------------------
 
 # Estimates for the area that would be used up if the
 # circuit was printed as an ASIC.
 
-logic_area, mem_area = pyrtl.area_estimation(tech_in_nm=65)
+logic_area, mem_area = # YOUR CODE HERE
 est_area = logic_area + mem_area
 print("Estimated Area of block", est_area, "sq mm")
 print()
@@ -65,8 +61,11 @@ print()
 pyrtl.synthesize()
 
 print("Pre Optimization:\n")
-timing = pyrtl.TimingAnalysis()
-timing.print_max_length()
+# TIMING ANALYSIS AND PRINTING THE MAX LENGTH
+
+# YOUR CODE HERE
+
+# SHOWING THE WORKING BLOCK BEFOR OPTIMIZATION
 for net in pyrtl.working_block().logic:
     print(str(net))
 print()
@@ -79,12 +78,9 @@ print()
 pyrtl.optimize()
 
 # Now to see the difference
-print("Post Optimization:\n")
-timing = pyrtl.TimingAnalysis()
-timing.print_max_length()
+# DO THE SAME AS YOU DID IN STEP 4 OF THIS FILE TO SHOW THE DIFFERENCE
 
-for net in pyrtl.working_block().logic:
-    print(str(net))
+# YOUR CODE HERE
 
 # As we can see, the number of nets in the circuit was drastically reduced by
 # the optimization algorithm.
@@ -97,12 +93,12 @@ for net in pyrtl.working_block().logic:
 # TO OPEN THE .gv FILE SIMPLY ISSUE THE FOLLOWING:
 # open FILENAME.gv
 with open("lfsr_behavioral.gv" , "w") as file:
-	pyrtl.output_to_graphviz(file=file)
+	# YOUR CODE HERE
 
 # GENERATING THE VERILOG CODE AND THE TEST BENCH
 with open("lfsr_behavioral.v","w") as file:
-	pyrtl.output_to_verilog(file)
+	# YOUR CODE HERE
 
+# PLEASE CALL THE .vcd FILE lfsr_structural.vcd
 with open("lfsr_behavioral_tb.v","w") as file:
-	pyrtl.output_verilog_testbench(file, simulation_trace = sim.tracer, toplevel_include="lfsr_behavioral.v",
-	vcd="lfsr_behavioral.vcd")
+	# YOUR CODE HERE
